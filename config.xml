@@ -1,0 +1,21 @@
+<config>
+
+  <gpu value="false"/>      <!-- If true, attempt to autoconfigure GPUs -->
+  <pause-on-start v='false'/>
+  <power value="full"/>     <!-- full power -->
+
+  <!-- Folding Slots -->
+  <slot id="0" type="GPU">
+    <cuda-index v='0'/>
+    <gpu-index v='0'/>
+    <opencl-index v='0'/>
+  </slot>
+
+  <!-- <client-type value="beta"/> -->
+  <!-- <client-type value="internal"/> -->
+  <!-- <project-key value="10495"/> -->
+
+  <!-- complete at most one work unit -->
+  <!-- <max-units v='1'> -->
+
+</config>
