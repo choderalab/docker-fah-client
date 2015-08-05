@@ -4,9 +4,7 @@ MAINTAINER John Chodera <john.chodera@choderalab.org>
 
 # Install curl and dependencies for FAH
 RUN apt-get update && apt-get install -y \
-  curl \
-  wget \
-  emacs23-nox
+  wget 
 
 # Retrieve fahclient and unpack it into /fah
 RUN mkdir fah && \
