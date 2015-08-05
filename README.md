@@ -1,50 +1,59 @@
 # docker-fah-client
-Information on running the Folding@Home client inside a docker image on hal.cbio.mskcc.org
+
+Running the Folding@home client inside a docker image.
+
+## Running on the `hal.cbio.mskcc.org` cluster at MSKCC
 
 Note that you must first request to be added to the `docker` access group by [posting to the hal GitHub issue tracker](https://github.com/cbio/cbio-cluster/issues).
 
-We use the [`kaixhin/cuda-torch`](https://registry.hub.docker.com/u/kaixhin/cuda-torch/) docker instance.
+Sample `submit-torque-docker-fah-client.sh` Torque/Moab script:
+```bash
+#!/bin/bash
+#
+# Set low priority
+#PBS -p -1024
+#
+# Array job: Run 10 WUs total, allowing 2 to run at a time.
+#PBS -t 1-10%2
+#
+# Set a maximum wall time greater than the time per WU (or else no WUs will finish)
+#PBS -l walltime=12:00:00
+#
+# Use the GPU queue
+#PBS -q gpu
+#
+# Reserve one GPU
+#PBS -l nodes=1:ppn=1:gpus=1:exclusive
 
-```
-# Interactive shell
-qsub -I -l walltime=04:00:00,nodes=1:ppn=1:gpus=1:shared -l mem=4G -q active
+# Set the project key here.
+export PROJECT_KEY=10495
 
+# Change to working directory
+cd "$PBS_O_WORKDIR"
 
-# Create a docker instance and drop into a bash shell
-docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 kaixhin/cuda-torch bash
+# Set CUDA_VISIBLE_DEVICES
+export CUDA_VISIBLE_DEVICES=`cat $PBS_GPUFILE | awk -F"-gpu" '{ printf A$2;A=","}'`
 
-# Install the FAHClient
-wget https://fah.stanford.edu/file-releases/public/release/fahclient/centos-5.3-64bit/v7.4/fahclient-7.4.4-1.x86_64.rpm
-mkdir fahclient
-cd fahclient
-rpm2cpio ../fahclient-7.4.4-1.x86_64.rpm | cpio -idmv
-```
-
-Creating our own docker instance?
-
-```
-# Start with CUDA base image
-FROM kaixhin/cuda
-MAINTAINER Kai Arulkumaran <design@kaixhin.com>
-
-# Install curl and dependencies for iTorch
-RUN apt-get update && apt-get install -y \
-  curl \
-  wget \
-  ipython3 \
-  python-zmq
-
-# Run FAH installation scripts
-RUN wget https://fah.stanford.edu/file-releases/public/release/fahclient/centos-5.3-64bit/v7.4/fahclient-7.4.4-1.x86_64.rpm
-RUN rpm -i fahclient-7.4.4-1.x86_64.rpm
+# Run exactly one work unit
+docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c 'cd fah && ./FAHClient --client-type=INTERNAL --project-key=$PROJECT_KEY --max-units=1'
 ```
 
-# Building the docker image
-```
-docker build .
+
+## Testing in an interactive shell
+
+You can drop into an interactive shell using
+```bash
+qsub -I -l walltime=04:00:00 -l nodes=1:ppn=1:gpus=1:exclusive -l mem=4G -q active
 ```
 
-Complete just one work unit!
+Assuming `CUDA_VISIBLE_DEVICES` is set correctly by Torque/Moab, you can run docker using
+```bash
+docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c 'cd fah && ./FAHClient --client-type=INTERNAL --project-key=$PROJECT_KEY --max-units=1'
 ```
-docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 kaixhin/cuda-torch cd fah && ./FAHClient client-type=INTERNAL project-key=10495 max-units=1 
-```
+
+## Acknowledgments
+
+The `jchodera/docker-fah-client` image is based on the excellent `kaixhin/cuda` CUDA-enabled docker instance.
+
+Thanks to Patrick Grinaway for discovering it was possible to run a Folding@home client inside a docker instance.
+
