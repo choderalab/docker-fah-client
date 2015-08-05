@@ -7,7 +7,7 @@ Running the Folding@home client inside a docker image.
 Note that you must first request to be added to the `docker` access group by [posting to the hal GitHub issue tracker](https://github.com/cbio/cbio-cluster/issues).
 
 Sample `submit-torque-docker-fah-client.sh` Torque/Moab script:
-```bash
+```
 #!/bin/bash
 #
 # Set low priority
@@ -42,12 +42,12 @@ docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/
 ## Testing in an interactive shell
 
 You can drop into an interactive shell using
-```bash
+```
 qsub -I -l walltime=04:00:00 -l nodes=1:ppn=1:gpus=1:exclusive -l mem=4G -q active
 ```
 
 Assuming `CUDA_VISIBLE_DEVICES` is set correctly by Torque/Moab, you can run docker using
-```bash
+```
 docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c 'cd fah && ./FAHClient --client-type=INTERNAL --project-key=$PROJECT_KEY --max-units=1'
 ```
 
