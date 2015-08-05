@@ -16,7 +16,7 @@
 #PBS -l nodes=1:ppn=1:gpus=1:exclusive
 
 # Set the project key here.
-export PROJECT_KEY="10495"
+export PROJECT_KEY="11400"
 
 # Change to working directory
 cd "$PBS_O_WORKDIR"
@@ -28,6 +28,6 @@ hostname
 date
 
 # Run exactly one work unit
-/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c 'cd fah && ./FAHClient --client-type=INTERNAL --project-key=${PROJECT_KEY} --max-units=1'
+/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c "cd fah && ./FAHClient --client-type=INTERNAL --project-key=${PROJECT_KEY} --max-units=1"
 
 date
