@@ -4,7 +4,7 @@ Running the Folding@home client inside a docker image.
 
 The [`jchodera/docker-fah-client`](https://registry.hub.docker.com/u/jchodera/docker-fah-client/) docker image has a copy of the Folding@home linux client inside the `/fah` directory.
 
-## Running on the `hal.cbio.mskcc.org` cluster at MSKCC
+## Running on `hal.cbio.mskcc.org`
 
 Note that you must first request to be added to the `docker` access group by [posting to the hal GitHub issue tracker](https://github.com/cbio/cbio-cluster/issues).
 
@@ -55,7 +55,7 @@ docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/
 
 ## Acknowledgments
 
-The `jchodera/docker-fah-client` image is based on the excellent `kaixhin/cuda` CUDA-enabled docker instance.
+The `jchodera/docker-fah-client` image is based on the excellent [`kaixhin/cuda`](https://registry.hub.docker.com/u/kaixhin/cuda/) CUDA-enabled docker instance.
 
 Thanks to Patrick Grinaway for discovering it was possible to run a Folding@home client inside a docker instance.
 
