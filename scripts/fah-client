@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+
+description = """
+Spin up a specified number of FAHClient instances pointed out designated INTERNAL project inside of docker containers.
+
+usage: fah-client --project=PROJECTID [--number=NUMBER] [--maxworkers=MAXWORKERS] [--jobname=JOBNAME] [--verbose]
+
+"""
+
+import argparse
+import sys
+import os, os.path
+
+parser = argparse.ArgumentParser(description=description)
+parser.add_argument('--project', dest='project', action='store', default=None, help='the internal project number (required)')
+parser.add_argument('--number', dest='number', action='store', default=1, help='number of work units to process (default: 1)')
+parser.add_argument('--maxworkers', dest='maxworkers', action='store', default=1, help='maximum number of simultaneous wokers (default: 1)')
+parser.add_argument('--walltime', dest='walltime', action='store', default='12:00:00', help='walltime limit (default: 12:00:00)')
+parser.add_argument('--jobname', dest='jobname', action='store', default='docker-fah-client', help='job name (default: docker-fah-client)')
+parser.add_argument('--verbose', dest='verbose', action='store_true', default=False, help='print debug output (default: False)')
+
+args = parser.parse_args()
+
+if args.project==None:
+    print("--project=PROJECT must be specified")
+    print("")
+    parser.print_help()
+    sys.exit(1)
+
+torque_template = """\
+#!/bin/bash
+#
+# Set job name
+#PBS -N %(jobname)s
+#
+# Array job: Run 10 WUs total, allowing 2 to run at a time.
+#PBS -t 1-%(number)s%%%(maxworkers)s
+#
+# Set a maximum wall time greater than the time per WU (or else no WUs will finish)
+#PBS -l walltime=%(walltime)s
+#
+# Use the GPU queue
+#PBS -q gpu
+#
+# join stdout and stderr
+#PBS -j oe
+#
+# spool output immediately
+#PBS -k oe
+#
+# Reserve one GPU
+#PBS -l nodes=1:ppn=1:gpus=1:exclusive
+
+# Change to working directory
+cd "$PBS_O_WORKDIR"
+
+# Set CUDA_VISIBLE_DEVICES
+export CUDA_VISIBLE_DEVICES=`cat $PBS_GPUFILE | awk -F"-gpu" '{ printf A$2;A=","}'`
+
+echo Working on project key %(project)s
+
+hostname
+date
+
+# Run exactly one work unit
+/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c "cd fah && ./FAHClient --client-type=INTERNAL --project-key=%(project)s --max-units=1"
+
+date
+"""
+
+# Open a pipe to the qsub command.
+from popen2 import popen2
+output, input = popen2('qsub')
+
+# Write job.
+job_string = torque_template % vars(args)
+input.write(job_string)
+input.close()
+if args.verbose: 
+    print "SUBMITTED TORQUE JOB:"
+    print "---------------------"
+    print job_string
+    print "---------------------"
+
+# Print output
+print "Submitted Torque job '%s' for %d containerized fah-client workers, with maximum of %d running at once." % (args.jobname, args.number, args.maxworkers)
+print "Torque job info:"
+print output.read()
+output.close()
+
+

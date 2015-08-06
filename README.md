@@ -56,6 +56,11 @@ Assuming `CUDA_VISIBLE_DEVICES` is set correctly by Torque/Moab, you can run doc
 docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c 'cd fah && ./FAHClient --client-type=INTERNAL --project-key=$PROJECT_KEY --max-units=1'
 ```
 
+## Manifest
+
+* `Dockerfile` - dockerfile for jchodera/docker-fah-client
+* `scripts/` - useful scripts
+
 ## Acknowledgments
 
 The `jchodera/docker-fah-client` image is based on the excellent [`kaixhin/cuda`](https://registry.hub.docker.com/u/kaixhin/cuda/) CUDA-enabled docker instance.

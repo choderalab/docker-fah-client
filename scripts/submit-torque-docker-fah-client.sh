@@ -4,7 +4,7 @@
 #PBS -p -1024
 #
 # Array job: Run 10 WUs total, allowing 2 to run at a time.
-#PBS -t 1-4%2
+#PBS -t 1-4%4
 #
 # Set a maximum wall time greater than the time per WU (or else no WUs will finish)
 #PBS -l walltime=12:00:00
@@ -12,11 +12,17 @@
 # Use the GPU queue
 #PBS -q gpu
 #
+# join stdout and stderr
+#PBS -j oe
+#
+# spool output immediately
+#PBS -k oe
+#
 # Reserve one GPU
 #PBS -l nodes=1:ppn=1:gpus=1:exclusive
 
 # Set the project key here.
-export PROJECT_KEY="11400"
+export PROJECT_KEY="10495"
 
 # Change to working directory
 cd "$PBS_O_WORKDIR"
