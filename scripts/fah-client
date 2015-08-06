@@ -58,6 +58,7 @@ export CUDA_VISIBLE_DEVICES=`cat $PBS_GPUFILE | awk -F"-gpu" '{ printf A$2;A=","
 echo Working on project key %(project)s
 
 hostname
+cat $PBS_GPUFILE
 date
 
 # Run exactly one work unit
