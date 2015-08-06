@@ -34,6 +34,6 @@ hostname
 date
 
 # Run exactly one work unit
-/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c "cd fah && ./FAHClient --client-type=INTERNAL --project-key=${PROJECT_KEY} --max-units=1"
+/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c "cd fah && ./FAHClient --client-type=INTERNAL --project-key=${PROJECT_KEY} --max-units=1 --exit-when-done=true"
 
 date
