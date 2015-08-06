@@ -37,6 +37,18 @@ optional arguments:
 
 ```
 
+For example, to launch 4 workers to test project 10495, you would use
+
+```
+fah-client --project=10495 --number=4 --maxworkers=4
+```
+
+If you want to grind through 100 work units running at most 10 workers at a time, you would use
+
+```
+fah-client --project=10495 --number=100 --maxworkers=10
+```
+
 ## Running via Torque/Moab scripts
 
 Sample `submit-torque-docker-fah-client.sh` Torque/Moab script:
