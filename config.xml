@@ -1,8 +1,8 @@
 <config>
 
-  <user value="dockerbot@choderalab.org"/>
-  <team value="229192"/>
-  <passkey value="7807096d0fee73c906b6c0ee5eefc594"/>
+  <user v="dockerbot@choderalab.org"/>
+  <team v="229192"/>
+  <passkey v="7807096d0fee73c906b6c0ee5eefc594"/>
 
   <gpu value="false"/>      <!-- If true, attempt to autoconfigure GPUs -->
   <pause-on-start v='false'/>
