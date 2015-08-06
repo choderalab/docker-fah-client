@@ -3,8 +3,6 @@
 description = """
 Spin up a specified number of FAHClient instances pointed out designated INTERNAL project inside of docker containers.
 
-usage: fah-client --project=PROJECTID [--number=NUMBER] [--maxworkers=MAXWORKERS] [--jobname=JOBNAME] [--verbose]
-
 """
 
 import argparse

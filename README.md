@@ -8,6 +8,37 @@ The [`jchodera/docker-fah-client`](https://registry.hub.docker.com/u/jchodera/do
 
 Note that you must first request to be added to the `docker` access group by [posting to the hal GitHub issue tracker](https://github.com/cbio/cbio-cluster/issues).
 
+Install the `docker-fah-client` conda package:
+
+```
+conda install -c choderalab docker-fah-client
+```
+
+Then, you can run the `fah-client` command-line helper:
+
+```
+[chodera@mskcc-ln1 ~/docker-fah-client]$ scripts/fah-client --help
+usage: fah-client [-h] [--project PROJECT] [--number NUMBER]
+                  [--maxworkers MAXWORKERS] [--walltime WALLTIME]
+                  [--jobname JOBNAME] [--verbose]
+
+Spin up a specified number of FAHClient instances pointed out designated
+INTERNAL project inside of docker containers. 
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --project PROJECT     the internal project number (required)
+  --number NUMBER       number of work units to process (default: 1)
+  --maxworkers MAXWORKERS
+                        maximum number of simultaneous wokers (default: 1)
+  --walltime WALLTIME   walltime limit (default: 12:00:00)
+  --jobname JOBNAME     job name (default: docker-fah-client)
+  --verbose             print debug output (default: False)
+
+```
+
+## Running via Torque/Moab scripts
+
 Sample `submit-torque-docker-fah-client.sh` Torque/Moab script:
 
 ```
