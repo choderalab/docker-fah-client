@@ -104,6 +104,14 @@ docker run -it --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/
 * `Dockerfile` - dockerfile for jchodera/docker-fah-client
 * `scripts/` - useful scripts
 
+## Dockerbot stats
+
+`FAHClient` currently runs with the `dockerbot@choderalab.org` user.
+
+Dockerbot FAH [stats](http://fah-web2.stanford.edu/cgi-bin/main.py?qtype=userpage&pname=BvezwhNvn%40eFvBwhsEsN%2Evhq) and [certificate](http://fah-web2.stanford.edu/awards/cached-certs/cert.dockerbot.6746779.jpg).
+
+![dockerbot certificate](http://fah-web2.stanford.edu/awards/cached-certs/cert.dockerbot.6746779.jpg)
+
 ## Acknowledgments
 
 The `jchodera/docker-fah-client` image is based on the excellent [`kaixhin/cuda`](https://registry.hub.docker.com/u/kaixhin/cuda/) CUDA-enabled docker instance.
