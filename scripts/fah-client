@@ -31,7 +31,7 @@ torque_template = """\
 # Set job name
 #PBS -N %(jobname)s
 #
-# Array job: Run 10 WUs total, allowing 2 to run at a time.
+# Array job: Run %(number)s WUs in total, allowing a maximum of %(maxworkers)s to run at a time.
 #PBS -t 1-%(number)s%%%(maxworkers)s
 #
 # Set a maximum wall time greater than the time per WU (or else no WUs will finish)
