@@ -76,15 +76,15 @@ job_string = torque_template % vars(args)
 input.write(job_string)
 input.close()
 if args.verbose: 
-    print "SUBMITTED TORQUE JOB:"
-    print "---------------------"
-    print job_string
-    print "---------------------"
+    print("SUBMITTED TORQUE JOB:")
+    print("---------------------")
+    print(job_string)
+    print("---------------------")
 
 # Print output
-print "Submitted Torque job '%s' for %s containerized fah-client workers, with maximum of %s running at once." % (args.jobname, args.number, args.maxworkers)
-print "Torque job info:"
-print output.read()
+print("Submitted Torque job '%s' for %s containerized fah-client workers, with maximum of %s running at once." % (args.jobname, args.number, args.maxworkers))
+print("Torque job info:")
+print(output.read())
 output.close()
 
 
