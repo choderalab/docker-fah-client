@@ -31,6 +31,8 @@ cd "$PBS_O_WORKDIR"
 export CUDA_VISIBLE_DEVICES=`cat $PBS_GPUFILE | awk -F"-gpu" '{ printf A$2;A=","}'`
 
 hostname
+cat $PBS_GPUFILE
+nvidia-smi
 date
 
 # Run exactly one work unit

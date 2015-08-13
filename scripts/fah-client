@@ -59,6 +59,7 @@ echo Working on project key %(project)s
 
 hostname
 cat $PBS_GPUFILE
+nvidia-smi
 date
 
 # Run exactly one work unit
