@@ -55,15 +55,20 @@ cd "$PBS_O_WORKDIR"
 # Set CUDA_VISIBLE_DEVICES
 export CUDA_VISIBLE_DEVICES=`cat $PBS_GPUFILE | awk -F"-gpu" '{ printf A$2;A=","}'`
 
-echo Working on project key %(project)s
+echo "Working on project key %(project)s"
 
 hostname
 cat $PBS_GPUFILE
 nvidia-smi
 date
 
+# Run docker test.
+echo "Running docker launch test..."
+/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c -x "date"
+
 # Run exactly one work unit
-/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c "cd fah && ./FAHClient --client-type=INTERNAL --project-key=%(project)s --max-units=1 --exit-when-done=true && ./FAHClient --send"
+echo "Launching FAHClient in docker..."
+/usr/bin/docker run --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia${CUDA_VISIBLE_DEVICES}:/dev/nvidia0 jchodera/docker-fah-client /bin/sh -c -x "cd fah && ./FAHClient --client-type=INTERNAL --project-key=%(project)s --max-units=1 --exit-when-done=true && ./FAHClient --send"
 
 date
 """
